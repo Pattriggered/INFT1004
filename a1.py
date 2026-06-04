@@ -100,20 +100,65 @@ def checkout(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCo
 
     return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
 
+def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount):
+    genre = input("Which genre would you like to return to? fiction/nonfiction/science/history: ").lower()        
+    if genre == "fiction":
+        if ficCount == 0:
+            print("You have not borrowed any books from fiction")
+        elif fiction == 30:
+            print("The inventory is full for fiction")
+        else:
+            fiction += 1
+            ficCount -= 1
+            print("you have successfully returned a fiction book, you have",ficCount,"remaining fiction books")
+    if genre == "nonfiction":
+        if nonFicCount == 0:
+            print("You have not borrowed any books from non-fiction")
+        elif nonFiction == 30:
+            print("The inventory is full for non-fiction")
+        else:
+            nonFiction += 1
+            nonFicCount -= 1
+            print("you have successfully returned a non-fiction book, you have",nonFicCount,"remaining non-fiction books")
+    if genre == "science":
+        if sciCount == 0:
+            print("You have not borrowed any books from science")
+        elif science == 30:
+            print("The inventory is full for science")
+        else:
+            science += 1
+            sciCount -= 1
+            print("you have successfully returned a science book, you have",sciCount,"remaining science books")
+    if genre == "history":
+        if hisCount == 0:
+            print("You have not borrowed any books from history")
+        elif history == 30:
+            print("The inventory is full for history")
+        else:
+            history += 1
+            hisCount -= 1
+            print("you have successfully returned a history book, you have",hisCount,"remaining history books")
         
+    return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
 
-
-
+def exit():
+    print("Farewell!")
+    
 
 #Main function
 fiction, nonFiction, science, history = initial_inventory()
-choice = menu()
-if choice == "checkout":
-    (fiction, nonFiction, science, history, ficCount, nonFicCount, 
-    sciCount, hisCount) = checkout(fiction, nonFiction, science, 
-    history, ficCount, nonFicCount, sciCount, hisCount)
-elif choice == "return":
-    
-
-
+valid = False
+while not valid:
+    choice = menu()
+    if choice == "checkout":
+        (fiction, nonFiction, science, history, ficCount, nonFicCount, 
+        sciCount, hisCount) = checkout(fiction, nonFiction, science, 
+        history, ficCount, nonFicCount, sciCount, hisCount)
+    elif choice == "return":
+        (fiction, nonFiction, science, history, ficCount, nonFicCount, 
+        sciCount, hisCount) = return_book(fiction, nonFiction, science, 
+        history, ficCount, nonFicCount, sciCount, hisCount)
+    else:
+        exit()
+        valid = True
 
