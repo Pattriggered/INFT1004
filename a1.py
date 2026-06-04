@@ -3,6 +3,7 @@ nonFicCount = 0
 sciCount = 0
 hisCount = 0
 
+#Initial inventory
 def initial_inventory():
     valid = False
     while not valid:
@@ -58,8 +59,61 @@ def initial_inventory():
     
     return fiction, nonFiction, science, history
 
+def menu():
+    print("Welcome to the main menu!")
+    choice = input("Checkout/Return/Analysis/Restock/Summary/Quit: ").lower()
+    return choice
+
+
+def checkout(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount):
+    genre = input("Which genre would you like to choose from fiction/nonfiction/science/history: ").lower()
+    if genre == "fiction":
+        if fiction > 0:
+            fiction -= 1
+            ficCount += 1
+            print("There are now ",fiction, "fiction books available and you now have",ficCount, "fiction books")
+        elif fiction == 0:
+            print("No books are available in fiction")
+    elif genre == "nonfiction":
+        if nonFiction > 0:
+            nonFiction -= 1
+            nonFicCount += 1
+            print("There are now ",nonFiction, "nonFiction books available and you now have",nonFiction, "nonFiction books")
+        elif nonFiction == 0:
+            print("No books are available in non-fiction")
+    elif genre == "science":
+        if science > 0:
+            science -= 1
+            sciCount += 1
+            print("There are now ",science, "science books available and you now have",science, "science books")
+        elif science == 0:
+            print("No books are available in science")
+    elif genre == "history":
+        if history > 0:
+            history -= 1
+            hisCount += 1
+            print("There are now ",history, "history books available and you now have",hisCount, "history books")
+        elif history == 0:
+            print("No books are available in history")
+    else:
+        print("Please choose from one of the available genres")
+
+    return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
+
+        
 
 
 
 
+#Main function
 fiction, nonFiction, science, history = initial_inventory()
+choice = menu()
+if choice == "checkout":
+    (fiction, nonFiction, science, history, ficCount, nonFicCount, 
+    sciCount, hisCount) = checkout(fiction, nonFiction, science, 
+    history, ficCount, nonFicCount, sciCount, hisCount)
+elif choice == "return":
+    
+
+
+
