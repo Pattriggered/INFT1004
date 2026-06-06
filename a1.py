@@ -60,9 +60,9 @@ def initial_inventory():
     return fiction, nonFiction, science, history
 
 def menu():
-    print("Welcome to the main menu!")
-    choice = input("Checkout/Return/Analysis/Restock/Summary/Quit: ").lower()
-    return choice
+        print("Welcome to the main menu!")
+        choice = input("Checkout/Return/Analysis/Restock/Summary/Quit: ").lower()
+        return choice
 
 
 def checkout(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount):
@@ -110,7 +110,7 @@ def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sc
         else:
             fiction += 1
             ficCount -= 1
-            print("you have successfully returned a fiction book, you have",ficCount,"remaining fiction books")
+            print("You have successfully returned a fiction book, you have",ficCount,"remaining fiction books")
     if genre == "nonfiction":
         if nonFicCount == 0:
             print("You have not borrowed any books from non-fiction")
@@ -119,7 +119,7 @@ def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sc
         else:
             nonFiction += 1
             nonFicCount -= 1
-            print("you have successfully returned a non-fiction book, you have",nonFicCount,"remaining non-fiction books")
+            print("You have successfully returned a non-fiction book, you have",nonFicCount,"remaining non-fiction books")
     if genre == "science":
         if sciCount == 0:
             print("You have not borrowed any books from science")
@@ -128,7 +128,7 @@ def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sc
         else:
             science += 1
             sciCount -= 1
-            print("you have successfully returned a science book, you have",sciCount,"remaining science books")
+            print("You have successfully returned a science book, you have",sciCount,"remaining science books")
     if genre == "history":
         if hisCount == 0:
             print("You have not borrowed any books from history")
@@ -137,9 +137,38 @@ def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sc
         else:
             history += 1
             hisCount -= 1
-            print("you have successfully returned a history book, you have",hisCount,"remaining history books")
+            print("You have successfully returned a history book, you have",hisCount,"remaining history books")
         
     return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
+
+def analysis(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount):
+    if (fiction/30)*100 >= 75:
+        print(f"The inventory status for fiction is High {(fiction/30)*100:.2f}%")
+    elif 50 < (fiction/30)*100 < 74:
+        print(f"The inventory status for fiction is Okay {(fiction/30)*100:.2f}%")
+    else:
+        print(f"The inventory status for fiction is Low {(fiction/30)*100:.2f}%")
+    if (nonFiction/20)*100 >= 75:
+        print(f"The inventory status for non-fiction is High {(nonFiction/20)*100:.2f}%")
+    elif 50 < (nonFiction/20)*100 < 74:
+        print(f"The inventory status for non-fiction is Okay {(nonFiction/20)*100:.2f}%")
+    else:
+        print(f"The inventory status for non-fiction is Low {(nonFiction/20)*100:.2f}%")
+    if (science/15)*100 >= 75:
+        print(f"The inventory status for science is High {(science/15)*100:.2f}%")
+    elif 50 < (science/15)*100 < 74:
+        print(f"The inventory status for science is Okay {(science/15)*100:.2f}%")
+    else:
+        print(f"The inventory status for science is Low {(science/15)*100:.2f}%")
+    if (history/25)*100 >= 75:
+        print(f"The inventory status for history is High {(history/25)*100:.2f}%")
+    elif 50 < (history/25)*100 < 74:
+        print(f"The inventory status for history is Okay {(history/25)*100:.2f}%")
+    else:
+        print(f"The inventory status for history is Low {(history/25)*100:.2f}%")
+
+    return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
+
 
 def exit():
     print("Farewell!")
@@ -157,6 +186,10 @@ while not valid:
     elif choice == "return":
         (fiction, nonFiction, science, history, ficCount, nonFicCount, 
         sciCount, hisCount) = return_book(fiction, nonFiction, science, 
+        history, ficCount, nonFicCount, sciCount, hisCount)
+    elif choice == "analysis":
+        (fiction, nonFiction, science, history, ficCount, nonFicCount, 
+        sciCount, hisCount) = analysis(fiction, nonFiction, science, 
         history, ficCount, nonFicCount, sciCount, hisCount)
     else:
         exit()
