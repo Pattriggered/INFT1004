@@ -71,28 +71,28 @@ def checkout(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCo
         if fiction > 0:
             fiction -= 1
             ficCount += 1
-            print("There are now ",fiction, "fiction books available and you now have",ficCount, "fiction books")
+            print("There are now ",fiction, "fiction books available and you have now borrowed",ficCount, "fiction books")
         elif fiction == 0:
             print("No books are available in fiction")
     elif genre == "nonfiction":
         if nonFiction > 0:
             nonFiction -= 1
             nonFicCount += 1
-            print("There are now ",nonFiction, "nonFiction books available and you now have",nonFiction, "nonFiction books")
+            print("There are now ",nonFiction, "nonFiction books available and you have now borrowed",nonFiction, "nonFiction books")
         elif nonFiction == 0:
             print("No books are available in non-fiction")
     elif genre == "science":
         if science > 0:
             science -= 1
             sciCount += 1
-            print("There are now ",science, "science books available and you now have",science, "science books")
+            print("There are now ",science, "science books available and you have now borrowed",science, "science books")
         elif science == 0:
             print("No books are available in science")
     elif genre == "history":
         if history > 0:
             history -= 1
             hisCount += 1
-            print("There are now ",history, "history books available and you now have",hisCount, "history books")
+            print("There are now ",history, "history books available and you have now borrowed",hisCount, "history books")
         elif history == 0:
             print("No books are available in history")
     else:
@@ -141,33 +141,33 @@ def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sc
         
     return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
 
-def analysis(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount):
+def analysis(fiction, nonFiction, science, history):
     if (fiction/30)*100 >= 75:
-        print(f"The inventory status for fiction is High {(fiction/30)*100:.2f}%")
-    elif 50 < (fiction/30)*100 < 74:
-        print(f"The inventory status for fiction is Okay {(fiction/30)*100:.2f}%")
+        print(f'The inventory status for fiction is "High" {(fiction/30)*100:.2f}%')
+    elif 50 <= (fiction/30)*100 < 74:
+        print(f'The inventory status for fiction is "Okay" {(fiction/30)*100:.2f}%')
     else:
-        print(f"The inventory status for fiction is Low {(fiction/30)*100:.2f}%")
+        print(f'The inventory status for fiction is "Low" {(fiction/30)*100:.2f}%')
     if (nonFiction/20)*100 >= 75:
-        print(f"The inventory status for non-fiction is High {(nonFiction/20)*100:.2f}%")
-    elif 50 < (nonFiction/20)*100 < 74:
-        print(f"The inventory status for non-fiction is Okay {(nonFiction/20)*100:.2f}%")
+        print(f'The inventory status for non-fiction is "High" {(nonFiction/20)*100:.2f}%')
+    elif 50 <= (nonFiction/20)*100 < 74:
+        print(f'The inventory status for non-fiction is "Okay" {(nonFiction/20)*100:.2f}%')
     else:
-        print(f"The inventory status for non-fiction is Low {(nonFiction/20)*100:.2f}%")
+        print(f'The inventory status for non-fiction is "Low" {(nonFiction/20)*100:.2f}%')
     if (science/15)*100 >= 75:
-        print(f"The inventory status for science is High {(science/15)*100:.2f}%")
-    elif 50 < (science/15)*100 < 74:
-        print(f"The inventory status for science is Okay {(science/15)*100:.2f}%")
+        print(f'The inventory status for science is "High" {(science/15)*100:.2f}%')
+    elif 50 <= (science/15)*100 < 74:
+        print(f'The inventory status for science is "Okay" {(science/15)*100:.2f}%')
     else:
-        print(f"The inventory status for science is Low {(science/15)*100:.2f}%")
+        print(f'The inventory status for science is "Low" {(science/15)*100:.2f}%')
     if (history/25)*100 >= 75:
-        print(f"The inventory status for history is High {(history/25)*100:.2f}%")
-    elif 50 < (history/25)*100 < 74:
-        print(f"The inventory status for history is Okay {(history/25)*100:.2f}%")
+        print(f'The inventory status for history is "High" {(history/25)*100:.2f}%')
+    elif 50 <= (history/25)*100 < 74:
+        print(f'The inventory status for history is "Okay" {(history/25)*100:.2f}%')
     else:
-        print(f"The inventory status for history is Low {(history/25)*100:.2f}%")
+        print(f'The inventory status for history is "Low" {(history/25)*100:.2f}%')
 
-    return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
+    return fiction, nonFiction, science, history,
 
 
 def exit():
@@ -188,9 +188,8 @@ while not valid:
         sciCount, hisCount) = return_book(fiction, nonFiction, science, 
         history, ficCount, nonFicCount, sciCount, hisCount)
     elif choice == "analysis":
-        (fiction, nonFiction, science, history, ficCount, nonFicCount, 
-        sciCount, hisCount) = analysis(fiction, nonFiction, science, 
-        history, ficCount, nonFicCount, sciCount, hisCount)
+        (fiction, nonFiction, science, history) = analysis(fiction, 
+        nonFiction, science, history)
     else:
         exit()
         valid = True
