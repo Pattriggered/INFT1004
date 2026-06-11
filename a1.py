@@ -2,8 +2,19 @@ ficCount = 0
 nonFicCount = 0
 sciCount = 0
 hisCount = 0
-
-#Initial inventory
+#Check that chosen amounts do not exzxceed the maximum per genre
+def check_inventory_limit(fiction, nonFiction, science, history):
+    if fiction > 30:
+        return False
+    elif nonFiction > 20:
+        return False
+    elif science > 15:
+        return False
+    elif fiction > 25:
+        return False
+    else:
+        return True
+#Initial inventory prompts thje user for each genres starting stock
 def initial_inventory():
     valid = False
     while not valid:
@@ -59,12 +70,13 @@ def initial_inventory():
     
     return fiction, nonFiction, science, history
 
-def menu():
+
+def display_menu():
         print("Welcome to the main menu!")
         choice = input("Checkout/Return/Analysis/Restock/Summary/Quit: ").lower()
         return choice
 
-
+#Checkout a book for a user, they select which genre to take from decreasing the stock level by 1
 def checkout(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount):
     genre = input("Which genre would you like to choose from fiction/nonfiction/science/history: ").lower()
     if genre == "fiction":
@@ -100,6 +112,7 @@ def checkout(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCo
 
     return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
 
+#Return book allows users to return borrowed books of specified genres, if no books are borrowed they cannot return any
 def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount):
     genre = input("Which genre would you like to return to? fiction/nonfiction/science/history: ").lower()        
     if genre == "fiction":
@@ -141,6 +154,7 @@ def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sc
         
     return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
 
+#Analysis prints the current stock for each genre
 def analysis(fiction, nonFiction, science, history):
     if (fiction/30)*100 >= 75:
         print(f'The inventory status for fiction is "High" {(fiction/30)*100:.2f}%')
@@ -169,7 +183,72 @@ def analysis(fiction, nonFiction, science, history):
 
     return fiction, nonFiction, science, history,
 
+#Restock shows current inventory and prompts for books to add per genre, if the book exceeds the max
+#Display error message and return to main menu
+def restock(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount):
+    print("The current inventory is: ")
+    print("You have",fiction,"fiction books in stock")
+    print("You have",nonFiction,"nonFiction books in stock")
+    print("You have",science,"science books in stock")
+    print("You havefic",history,"history books in stock")
+    genre = input("Which genre would you like to restock? fiction/nonfiction/science/history: ").lower()
+    if genre == "fiction":
+        ficMax = 30-(fiction+ficCount)
+        ficAmnt = input(f"How many fiction books would you like to restock? (Max: {ficMax}): " )
+        if ficAmnt.isdigit():
+            ficAmnt = int(ficAmnt)
+            if ficAmnt > ficMax:
+                print("Your number exceeds the stock limit")
+            else:
+                fiction += ficAmnt
+                print("Your inventory has been updated you now have",fiction,"fiction books")
+        else:
+            print("Please enter a positive number")
+    if genre == "nonfiction":
+        nonFicMax = 20-(nonFiction+nonFicCount)
+        nonFicAmnt = input(f"How many non-fiction books would you like to restock? (Max: {nonFicMax}): " )
+        if nonFicAmnt.isdigit():
+            nonFicAmnt = int(nonFicAmnt)
+            if nonFicAmnt > nonFicMax:
+                print("Your number exceeds the stock limit")
+            if nonFicAmnt < 0:
+                print("Please select a positive number")
+            else:
+                nonFiction += nonFicAmnt
+                print("Your inventory has been updated you now have",nonFiction,"non-fiction books")
+        else:
+            print("Please enter a positive number")
+    if genre == "science":
+        sciMax = 15-(science+sciCount)
+        sciAmnt = input(f"How many science books would you like to restock? (Max: {sciMax}): " )
+        if sciAmnt.isdigit():
+            sciAmnt = int(sciAmnt)
+            if sciAmnt > sciMax:
+                print("Your number exceeds the stock limit")
+            if sciAmnt < 0:
+                print("Please select a positive number")
+            else:
+                science += sciAmnt
+                print("Your inventory has been updated you now have",science,"science books")
+        else:
+            print("Please enter a positive number")
+    if genre == "history":
+        hisMax = 25-(history+hisCount)
+        hisAmnt = input(f"How many history books would you like to restock? (Max: {hisMax}): " )
+        if hisAmnt.isdigit():
+            hisAmnt = int(hisAmnt)
+            if hisAmnt > hisMax:
+                print("Your number exceeds the stock limit")
+            if hisAmnt < 0:
+                print("Please select a positive number")
+            else:
+                history += hisAmnt
+                print("Your inventory has been updated you now have",history,"history books")
+        else:
+            print("Please enter a positive number")
+    return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
 
+#Ends the program
 def exit():
     print("Farewell!")
     
@@ -178,7 +257,7 @@ def exit():
 fiction, nonFiction, science, history = initial_inventory()
 valid = False
 while not valid:
-    choice = menu()
+    choice = display_menu()
     if choice == "checkout":
         (fiction, nonFiction, science, history, ficCount, nonFicCount, 
         sciCount, hisCount) = checkout(fiction, nonFiction, science, 
@@ -190,6 +269,10 @@ while not valid:
     elif choice == "analysis":
         (fiction, nonFiction, science, history) = analysis(fiction, 
         nonFiction, science, history)
+    elif choice == "restock":
+        (fiction, nonFiction, science, history,  ficCount, nonFicCount,
+        sciCount, hisCount) = restock(fiction, nonFiction, science,
+        history, ficCount, nonFicCount, sciCount, hisCount)
     else:
         exit()
         valid = True
