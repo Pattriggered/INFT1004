@@ -1,3 +1,7 @@
+#Author: <Patrick Triggell>
+#Date: 1/6/26
+#Task: INFT1004/INFT1006 Assignment 1 Library Book Management System
+
 ficCount = 0
 nonFicCount = 0
 sciCount = 0
@@ -248,6 +252,14 @@ def restock(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCou
             print("Please enter a positive number")
     return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
 
+def summary(ficCount,nonFicCount,sciCount,hisCount):
+    print("You have borrowed",ficCount,"fiction books")
+    print("You have borrowed",nonFicCount,"non-fiction books")
+    print("You have borrowed",sciCount,"science books")
+    print("You have borrowed",hisCount,"history books")
+
+    return ficCount,nonFicCount,sciCount,hisCount
+
 #Ends the program
 def exit():
     print("Farewell!")
@@ -273,6 +285,9 @@ while not valid:
         (fiction, nonFiction, science, history,  ficCount, nonFicCount,
         sciCount, hisCount) = restock(fiction, nonFiction, science,
         history, ficCount, nonFicCount, sciCount, hisCount)
+    elif choice == "summary":
+        (ficCount,nonFicCount,sciCount,hisCount) = summary(ficCount,
+        nonFicCount,sciCount,hisCount)
     else:
         exit()
         valid = True
