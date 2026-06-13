@@ -90,28 +90,28 @@ def checkout(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCo
         if fiction > 0:
             fiction -= 1
             ficCount += 1
-            print("There are now ",fiction, "fiction books available and you have now borrowed",ficCount, "fiction books")
+            print("There are now",fiction, "fiction books available and you have now borrowed",ficCount, "fiction books")
         elif fiction == 0:
             print("No books are available in fiction")
     elif genre == "nonfiction":
         if nonFiction > 0:
             nonFiction -= 1
             nonFicCount += 1
-            print("There are now ",nonFiction, "nonFiction books available and you have now borrowed",nonFiction, "nonFiction books")
+            print("There are now",nonFiction, "nonFiction books available and you have now borrowed",nonFiction, "nonFiction books")
         elif nonFiction == 0:
             print("No books are available in non-fiction")
     elif genre == "science":
         if science > 0:
             science -= 1
             sciCount += 1
-            print("There are now ",science, "science books available and you have now borrowed",science, "science books")
+            print("There are now",science, "science books available and you have now borrowed",science, "science books")
         elif science == 0:
             print("No books are available in science")
     elif genre == "history":
         if history > 0:
             history -= 1
             hisCount += 1
-            print("There are now ",history, "history books available and you have now borrowed",hisCount, "history books")
+            print("There are now",history, "history books available and you have now borrowed",hisCount, "history books")
         elif history == 0:
             print("No books are available in history")
     else:
@@ -119,7 +119,8 @@ def checkout(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCo
 
     return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
 
-#Return book allows users to return borrowed books of specified genres, if no books are borrowed they cannot return any
+#Return book allows users to return borrowed books of specified genres, if no books are borrowed
+#display an error message that the user does not have books to return
 def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount):
     genre = input("Which genre would you like to return to? fiction/nonfiction/science/history: ").lower()        
     if genre == "fiction":
@@ -131,7 +132,7 @@ def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sc
             fiction += 1
             ficCount -= 1
             print("You have successfully returned a fiction book, you have",ficCount,"remaining fiction books")
-    if genre == "nonfiction":
+    elif genre == "nonfiction":
         if nonFicCount == 0:
             print("You have not borrowed any books from non-fiction")
         elif nonFiction == 30:
@@ -140,7 +141,7 @@ def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sc
             nonFiction += 1
             nonFicCount -= 1
             print("You have successfully returned a non-fiction book, you have",nonFicCount,"remaining non-fiction books")
-    if genre == "science":
+    elif genre == "science":
         if sciCount == 0:
             print("You have not borrowed any books from science")
         elif science == 30:
@@ -149,7 +150,7 @@ def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sc
             science += 1
             sciCount -= 1
             print("You have successfully returned a science book, you have",sciCount,"remaining science books")
-    if genre == "history":
+    elif genre == "history":
         if hisCount == 0:
             print("You have not borrowed any books from history")
         elif history == 30:
@@ -158,10 +159,13 @@ def return_book(fiction, nonFiction, science, history, ficCount, nonFicCount, sc
             history += 1
             hisCount -= 1
             print("You have successfully returned a history book, you have",hisCount,"remaining history books")
+    else:
+        print("Please choose from one of the available genres")
+
         
     return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
 
-#Analysis prints the current stock for each genre
+#Analysis prints the current stock for each genre and displays the percentage as either Low/Okay/High
 def analysis(fiction, nonFiction, science, history):
     if (fiction/30)*100 >= 75:
         print(f'The inventory status for fiction is "High" {(fiction/30)*100:.2f}%')
