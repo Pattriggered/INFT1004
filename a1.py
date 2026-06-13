@@ -2,11 +2,13 @@
 #Date: 1/6/26
 #Task: INFT1004/INFT1006 Assignment 1 Library Book Management System
 
+#initialising the counter variables for borrowing and returning
 ficCount = 0
 nonFicCount = 0
 sciCount = 0
 hisCount = 0
-#Check that chosen amounts do not exzxceed the maximum per genre
+
+#Check that chosen amounts do not exceed the maximum per genre (slightly redundant with the initial inventory setup)
 def check_inventory_limit(fiction, nonFiction, science, history):
     if fiction > 30:
         return False
@@ -14,11 +16,12 @@ def check_inventory_limit(fiction, nonFiction, science, history):
         return False
     elif science > 15:
         return False
-    elif fiction > 25:
+    elif history > 25:
         return False
     else:
         return True
-#Initial inventory prompts thje user for each genres starting stock
+    
+#Initial inventory prompts the user for each genres starting stock
 def initial_inventory():
     valid = False
     while not valid:
@@ -74,7 +77,7 @@ def initial_inventory():
     
     return fiction, nonFiction, science, history
 
-
+#Displays a welcome message and prompts the user for what they would like to do
 def display_menu():
         print("Welcome to the main menu!")
         choice = input("Checkout/Return/Analysis/Restock/Summary/Quit: ").lower()
@@ -194,7 +197,7 @@ def restock(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCou
     print("You have",fiction,"fiction books in stock")
     print("You have",nonFiction,"nonFiction books in stock")
     print("You have",science,"science books in stock")
-    print("You havefic",history,"history books in stock")
+    print("You have",history,"history books in stock")
     genre = input("Which genre would you like to restock? fiction/nonfiction/science/history: ").lower()
     if genre == "fiction":
         ficMax = 30-(fiction+ficCount)
@@ -208,7 +211,7 @@ def restock(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCou
                 print("Your inventory has been updated you now have",fiction,"fiction books")
         else:
             print("Please enter a positive number")
-    if genre == "nonfiction":
+    elif genre == "nonfiction":
         nonFicMax = 20-(nonFiction+nonFicCount)
         nonFicAmnt = input(f"How many non-fiction books would you like to restock? (Max: {nonFicMax}): " )
         if nonFicAmnt.isdigit():
@@ -222,7 +225,7 @@ def restock(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCou
                 print("Your inventory has been updated you now have",nonFiction,"non-fiction books")
         else:
             print("Please enter a positive number")
-    if genre == "science":
+    elif genre == "science":
         sciMax = 15-(science+sciCount)
         sciAmnt = input(f"How many science books would you like to restock? (Max: {sciMax}): " )
         if sciAmnt.isdigit():
@@ -236,7 +239,7 @@ def restock(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCou
                 print("Your inventory has been updated you now have",science,"science books")
         else:
             print("Please enter a positive number")
-    if genre == "history":
+    elif genre == "history":
         hisMax = 25-(history+hisCount)
         hisAmnt = input(f"How many history books would you like to restock? (Max: {hisMax}): " )
         if hisAmnt.isdigit():
@@ -250,8 +253,11 @@ def restock(fiction, nonFiction, science, history, ficCount, nonFicCount, sciCou
                 print("Your inventory has been updated you now have",history,"history books")
         else:
             print("Please enter a positive number")
+    else:
+        print("Please choose from one of the available genres")
     return fiction, nonFiction, science, history, ficCount, nonFicCount, sciCount, hisCount
 
+#Prints the current amount of borrowed books for each genre
 def summary(ficCount,nonFicCount,sciCount,hisCount):
     print("You have borrowed",ficCount,"fiction books")
     print("You have borrowed",nonFicCount,"non-fiction books")
@@ -261,11 +267,11 @@ def summary(ficCount,nonFicCount,sciCount,hisCount):
     return ficCount,nonFicCount,sciCount,hisCount
 
 #Ends the program
-def exit():
+def quit():
     print("Farewell!")
     
 
-#Main function
+#Main function to run the program
 fiction, nonFiction, science, history = initial_inventory()
 valid = False
 while not valid:
@@ -288,7 +294,8 @@ while not valid:
     elif choice == "summary":
         (ficCount,nonFicCount,sciCount,hisCount) = summary(ficCount,
         nonFicCount,sciCount,hisCount)
-    else:
-        exit()
+    elif choice == "quit":
+        quit()
         valid = True
+    else: choice = display_menu()
 
