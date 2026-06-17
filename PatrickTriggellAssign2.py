@@ -6,10 +6,23 @@ import pandas as pd
 import matplotlib
 
 def load_inventory_from_csv():
-    pass
+    try:
+        file = open('LibraryInventory.csv','r')
+        file_content = file.readlines()
+        print("File read successfully.")
+        print(file_content)
+        inventory = {}
+        for line in file_content:
+            genre, amount = line.strip().split(",")
+            inventory[genre] = int(amount)
+        print(inventory)
+    except FileNotFoundError:
+        print("File was not found.")
 
+    
 def display_inventory():
     pass
+
 
 def add_new_genre():
     pass
@@ -24,4 +37,7 @@ def save_inventory_to_csv():
     pass
 
 def menu():
-    pass
+    print("Welcome to the main menu!")
+    choice = input("What would you like to do display inventory/add new genre/checkout or return/analysis/save to csv")
+
+load_inventory_from_csv()
