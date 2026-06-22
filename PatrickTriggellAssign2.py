@@ -24,7 +24,7 @@ def load_inventory_from_csv():
     except FileNotFoundError:
         print("File was not found.")
 
-#Presents all genres and their current book counts clearly
+#Presents all genres and their current book counts neatly formatted
 def display_inventory(inventory):
     for genre, amount in inventory.items():
         print("You have",amount,"books in",genre.title())
@@ -35,13 +35,22 @@ def add_new_genre(inventory):
     valid = False
     while not valid:
         genre = input("What new genre would you like to add? ")
-        if genre.lower() in [key.lower() for key in inventory]:
+        if genre.lower() in [key.lower() for key in inventory]: #Uniqueness check
             print("Genre name must be unique")
         else:
             valid = True
-    amnt = int(input("How many books would you like to add? "))
+    valid = False
+    while not valid:
+        amnt = int(input("How many books would you like to add? ")) 
+        if amnt <= 0: #For positive integers assuming the exclusion of 0
+            print("Initial count must be a positive integer")
+            valid = False
+        else:
+            valid = True
     inventory[genre] = amnt
     print("You successfully created", genre, "and added", amnt, "books")
+    maxAmnt[genre.title()] = amnt
+    print(maxAmnt)
     display_inventory(inventory)
     return inventory
 
