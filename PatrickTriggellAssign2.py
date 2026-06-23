@@ -41,21 +41,54 @@ def add_new_genre(inventory):
             valid = True
     valid = False
     while not valid:
-        amnt = int(input("How many books would you like to add? ")) 
-        if amnt <= 0: #For positive integers assuming the exclusion of 0
+        amount = int(input("How many books would you like to add? ")) 
+        if amount <= 0: #For positive integers assuming the exclusion of 0
             print("Initial count must be a positive integer")
             valid = False
         else:
             valid = True
-    inventory[genre] = amnt
-    print("You successfully created", genre, "and added", amnt, "books")
-    maxAmnt[genre.title()] = amnt
+    inventory[genre.title()] = amount
+    print("You successfully created", genre, "and added", amount, "books")
+    maxAmnt[genre.title()] = amount #Stores max for this genre in the max dictionary
     print(maxAmnt)
     display_inventory(inventory)
-    return inventory
+    return inventory, maxAmnt
 
-def checkout_or_return():
-    pass
+def checkout_or_return(inventory):
+    display_inventory(inventory)
+    valid = False
+    while not valid:
+        prompt = input("Would you like to Checkout (C) or Return (R)").lower()
+        if prompt == "checkout" or prompt == "c":
+            genre = input("Which genre would you like to checkout from? ")
+            
+            if genre.lower() in [key.lower() for key in inventory]:
+                for key in inventory: #compares the input to the keys in inventory dictionary
+                    if key.lower() == genre.lower():
+                        genre = key
+                        valid = True
+                amount = int(input("How many books do you want to checkout? "))
+                if amount <= 0:
+                    print("must be a positive integer") 
+                    valid = False
+                else:
+                    if inventory[genre] - amount < 0:
+                        print("You cannot checkout more books than are available")
+                        valid = False
+                    else:
+                        inventory[genre] -= amount
+                        print("You have checked out",amount, "books from", genre)
+                        valid = True                   
+            else:
+                print("Error! invalid input. Please choose from one of the options")
+                valid = False
+        elif prompt == "return" or prompt == "r":
+            print("")
+            valid = True
+        else:
+            print("Error! invalid input. Please choose from one of the options")
+            valid = False
+    return inventory
 
 def inventory_analysis_and_visualisation():
     pass
@@ -68,7 +101,7 @@ def display_menu():
     choice = input("Please choose from one of these options:"
                 "\n(1)Inventory"
                 "\n(2)Add New Genre"
-                "\n(3)Checkout (C) or Return (R)"
+                "\n(3)Checkout or Return"
                 "\n(4)Analysis"
                 " \n(5)Save Changes to CSV"
                 " \n(6)Quit\n").lower()
@@ -83,7 +116,9 @@ while not valid:
     if choice == "1" or choice == "inventory":
         display_inventory(inventory)
     elif choice == "2" or choice == "add new genre":
-        inventory = add_new_genre(inventory)
+        inventory, maxAmnt = add_new_genre(inventory)
+    elif choice == "3" or choice == "checkout or return":
+        inventory = checkout_or_return(inventory)
     elif choice == "6" or choice == "quit":
         print("Farewell!")
         valid = True
