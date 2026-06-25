@@ -4,11 +4,11 @@
 
 import math as m
 import pandas as pd
-import matplotlib
+import matplotlib.pyplot as plt
 
 maxAmnt = {} #Seperate dictionary created to store maximum amounts per genre
 
-#Using pandas import csv file and convert to a dictionart
+#Using pandas import csv file and convert to a dictionary
 def load_inventory_from_csv():
     try:
         df = pd.read_csv("LibraryInventory.csv",header = None) #load into pandas dataframe
@@ -56,6 +56,7 @@ def add_new_genre(inventory):
     display_inventory(inventory)
     return inventory, maxAmnt
 
+#Allows the user to either checkout or return books
 def checkout_or_return(inventory):
     display_inventory(inventory)
     valid = False
@@ -74,15 +75,12 @@ def checkout_or_return(inventory):
                         amount = int(input("How many books do you want to checkout? "))
                         if amount <= 0:
                             print("Must be a positive integer") 
-                            False
                         else:
                             if inventory[genre] - amount < 0: #positivity check
                                 print("You cannot checkout more books than are available")
-                                False
                             else:
-                                inventory[genre] -= amount
+                                inventory[genre] -= amount #updates inventory
                                 print("You have checked out",amount, "books from", genre)
-                                True
                                 return inventory
                     except ValueError:
                         print("Please select a number")
@@ -115,10 +113,12 @@ def checkout_or_return(inventory):
                 print("Error! invalid input. Please choose from one of the options")
                 valid = False
 
+#provides both text and visual report of an inventory analysis for the user
 def inventory_analysis_and_visualisation(inventory, maxAmnt):
+    #Creating a text report
     table = pd.DataFrame({"Genre":list(inventory.keys()), "Books":list(inventory.values())})
     print("The total number of books in the library is",table["Books"].sum())
-    table["Average"] = (table["Books"]/len(table)).apply(m.ceil)
+    table["Average"] = (table["Books"]/len(table)).apply(m.ceil) #takes the rounded up nearest whole number
     print(table)
     for genre in inventory:
         status = (inventory[genre]/maxAmnt[genre]) * 100
@@ -129,18 +129,52 @@ def inventory_analysis_and_visualisation(inventory, maxAmnt):
         else:
             level = "Low"
         print(f"{genre} stock status is at {status:.2f}% which is {level}")
-    return inventory, maxAmnt
     
+    
+    #Creating a bar plot
+    plt.bar(table["Genre"], table["Books"])
+    plt.title("Library")
+    plt.xlabel("Genres")
+    plt.ylabel("Current Inventory Count")
+    plt.show()
 
+    return inventory, maxAmnt
 
+#Write the updated inventory back to LibraryInventory.csv
+def save_inventory_to_csv(inventory):
+    try:
 
+        df = pd.DataFrame(list(inventory.items()))
+        df.to_csv("LibraryInventory.csv", header = False, index = False)
+        print("Saving was successful!")
+    
+    except PermissionError:
+        print("The file could not be written")
 
+    except OSError:
+        print("An error occurred whilst attempting to save the file")
+    
+    return inventory
 
+#Saves the latest inventory and exists the program with a goodbye message
+def quit_program(inventory):
+    try:
 
+        df = pd.DataFrame(list(inventory.items()))
+        df.to_csv("LibraryInventory.csv", header = False, index = False)
+        print("File was saved")
+    
+    except PermissionError:
+        print("The file could not be written")
 
-def save_inventory_to_csv():
-    pass
+    except OSError:
+        print("An error occured whilst attempting to save the file")
+    
+    print("Farewell!")
+    
+    return inventory
 
+#Displays menu items
 def display_menu():
     print("Welcome to the main menu!")
     choice = input("Please choose from one of these options:"
@@ -152,7 +186,7 @@ def display_menu():
                 " \n(6)Quit\n").lower()
     return choice
 
-
+#Main program
 inventory, maxAmnt = load_inventory_from_csv()
 valid = False
 while not valid:
@@ -166,6 +200,8 @@ while not valid:
         inventory = checkout_or_return(inventory)
     elif choice == "4" or choice == "analysis":
         inventory, maxAmnt = inventory_analysis_and_visualisation(inventory, maxAmnt)
+    elif choice == "5" or choice == "save changes to csv":
+        inventory = save_inventory_to_csv(inventory)
     elif choice == "6" or choice == "quit":
-        print("Farewell!")
+        inventory = quit_program(inventory)
         valid = True
