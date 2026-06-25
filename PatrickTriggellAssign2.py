@@ -2,6 +2,7 @@
 #Date: <17/6/26> – <upload date>
 #Task: INFT1004 Assignment 2 – Library Management System – Part 2
 
+import math as m
 import pandas as pd
 import matplotlib
 
@@ -17,10 +18,10 @@ def load_inventory_from_csv():
             genre = df[0][i]
             amount = int(df[1][i])
             inventory[genre] = amount
-            maxAmnt = inventory.copy() #store initial quantites in max dictionary
+        maxAmnt = inventory.copy() #store initial quantites in max dictionary
         print(inventory)
         print(maxAmnt)
-        return inventory
+        return inventory, maxAmnt
 
     except FileNotFoundError:
         print("File was not found.")
@@ -114,8 +115,28 @@ def checkout_or_return(inventory):
                 print("Error! invalid input. Please choose from one of the options")
                 valid = False
 
-def inventory_analysis_and_visualisation():
-    pass
+def inventory_analysis_and_visualisation(inventory, maxAmnt):
+    table = pd.DataFrame({"Genre":list(inventory.keys()), "Books":list(inventory.values())})
+    print("The total number of books in the library is",table["Books"].sum())
+    table["Average"] = (table["Books"]/len(table)).apply(m.ceil)
+    print(table)
+    for genre in inventory:
+        status = (inventory[genre]/maxAmnt[genre]) * 100
+        if status >= 75:
+            level = "High"
+        elif 50 <= status < 75:
+            level = "OK"
+        else:
+            level = "Low"
+        print(f"{genre} stock status is at {status:.2f}% which is {level}")
+    return inventory, maxAmnt
+    
+
+
+
+
+
+
 
 def save_inventory_to_csv():
     pass
@@ -132,7 +153,7 @@ def display_menu():
     return choice
 
 
-inventory = load_inventory_from_csv()
+inventory, maxAmnt = load_inventory_from_csv()
 valid = False
 while not valid:
 
@@ -143,6 +164,8 @@ while not valid:
         inventory, maxAmnt = add_new_genre(inventory)
     elif choice == "3" or choice == "checkout or return":
         inventory = checkout_or_return(inventory)
+    elif choice == "4" or choice == "analysis":
+        inventory, maxAmnt = inventory_analysis_and_visualisation(inventory, maxAmnt)
     elif choice == "6" or choice == "quit":
         print("Farewell!")
         valid = True
