@@ -5,8 +5,7 @@
 import pandas as pd
 import matplotlib
 
-#Seperate dictionary created to store maximum amounts per genre
-maxAmnt = {"Fiction":30, "Nonfiction":20,"Science":15,"History":25}
+maxAmnt = {} #Seperate dictionary created to store maximum amounts per genre
 
 #Using pandas import csv file and convert to a dictionart
 def load_inventory_from_csv():
@@ -18,7 +17,9 @@ def load_inventory_from_csv():
             genre = df[0][i]
             amount = int(df[1][i])
             inventory[genre] = amount
+            maxAmnt = inventory.copy() #store initial quantites in max dictionary
         print(inventory)
+        print(maxAmnt)
         return inventory
 
     except FileNotFoundError:
@@ -66,29 +67,52 @@ def checkout_or_return(inventory):
                 for key in inventory: #compares the input to the keys in inventory dictionary
                     if key.lower() == genre.lower():
                         genre = key
-                        valid = True
-                amount = int(input("How many books do you want to checkout? "))
-                if amount <= 0:
-                    print("must be a positive integer") 
-                    valid = False
-                else:
-                    if inventory[genre] - amount < 0:
-                        print("You cannot checkout more books than are available")
-                        valid = False
-                    else:
-                        inventory[genre] -= amount
-                        print("You have checked out",amount, "books from", genre)
-                        valid = True                   
+                        break
+                while True:
+                    try:
+                        amount = int(input("How many books do you want to checkout? "))
+                        if amount <= 0:
+                            print("Must be a positive integer") 
+                            False
+                        else:
+                            if inventory[genre] - amount < 0: #positivity check
+                                print("You cannot checkout more books than are available")
+                                False
+                            else:
+                                inventory[genre] -= amount
+                                print("You have checked out",amount, "books from", genre)
+                                True
+                                return inventory
+                    except ValueError:
+                        print("Please select a number")
             else:
-                print("Error! invalid input. Please choose from one of the options")
+                print("Error! invalid input. Please choose from one of the genres in your inventory")
                 valid = False
         elif prompt == "return" or prompt == "r":
-            print("")
-            valid = True
+            genre = input("Which genre would you like to return to? ")
+            
+            if genre.lower() in [key.lower() for key in inventory]:
+                for key in inventory: #compares the input to the keys in inventory dictionary
+                    if key.lower() == genre.lower():
+                        genre = key
+                        break
+                while True:
+                    try:
+                        amount = int(input("How many books do you want return? "))
+                        if amount <= 0:
+                            print("Must be a positive integer") 
+                        else:
+                            inventory[genre] += amount
+                            print("You have returned",amount, "books from", genre)                           
+                            return inventory
+                    except ValueError:
+                            print("Please select a number")
+            else:
+                    print("Error! invalid input. Please choose from one of the genres in your inventory")
+                    valid = False
         else:
-            print("Error! invalid input. Please choose from one of the options")
-            valid = False
-    return inventory
+                print("Error! invalid input. Please choose from one of the options")
+                valid = False
 
 def inventory_analysis_and_visualisation():
     pass
