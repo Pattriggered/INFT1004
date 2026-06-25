@@ -25,6 +25,11 @@ def load_inventory_from_csv():
 
     except FileNotFoundError:
         print("File was not found.")
+        quit()
+    
+    except ValueError:
+        print("CSV contains invalid book amounts")
+        quit()
 
 #Presents all genres and their current book counts neatly formatted
 def display_inventory(inventory):
@@ -33,7 +38,7 @@ def display_inventory(inventory):
     
 #Takes user input to create a unique genre with a positive integer for the amount, updated inventory is printed
 #After successful addition and maximum dictionary is updated with new genre and max amount
-def add_new_genre(inventory):
+def add_new_genre(inventory, maxAmnt):
     valid = False
     while not valid:
         genre = input("What new genre would you like to add? ")
@@ -43,12 +48,15 @@ def add_new_genre(inventory):
             valid = True
     valid = False
     while not valid:
-        amount = int(input("How many books would you like to add? ")) 
-        if amount <= 0: #For positive integers assuming the exclusion of 0
-            print("Initial count must be a positive integer")
-            valid = False
-        else:
-            valid = True
+        try:
+            amount = int(input("How many books would you like to add? ")) 
+            if amount <= 0: #For positive integers assuming the exclusion of 0
+                print("Initial count must be a positive integer")
+                valid = False
+            else:
+                valid = True
+        except ValueError:
+            print("Please enter a number")
     inventory[genre.title()] = amount
     print("You successfully created", genre, "and added", amount, "books")
     maxAmnt[genre.title()] = amount #Stores max for this genre in the max dictionary
@@ -195,7 +203,7 @@ while not valid:
     if choice == "1" or choice == "inventory":
         display_inventory(inventory)
     elif choice == "2" or choice == "add new genre":
-        inventory, maxAmnt = add_new_genre(inventory)
+        inventory, maxAmnt = add_new_genre(inventory, maxAmnt)
     elif choice == "3" or choice == "checkout or return":
         inventory = checkout_or_return(inventory)
     elif choice == "4" or choice == "analysis":
