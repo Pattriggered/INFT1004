@@ -1,5 +1,5 @@
 #Author: <Patrick Triggell>
-#Date: <17/6/26> – <upload date>
+#Date: <17/6/26> – <27/6/26>
 #Task: INFT1004 Assignment 2 – Library Management System – Part 2
 
 import math as m
@@ -19,8 +19,6 @@ def load_inventory_from_csv():
             amount = int(df[1][i])
             inventory[genre] = amount
         maxAmnt = inventory.copy() #store initial quantites in max dictionary
-        print(inventory)
-        print(maxAmnt)
         return inventory, maxAmnt
 
     except FileNotFoundError:
@@ -41,8 +39,10 @@ def display_inventory(inventory):
 def add_new_genre(inventory, maxAmnt):
     valid = False
     while not valid:
-        genre = input("What new genre would you like to add? ")
-        if genre.lower() in [key.lower() for key in inventory]: #Uniqueness check
+        genre = input("What new genre would you like to add? ").strip() 
+        if not genre.replace(" ","").isalpha(): #Prevents numbers as Genre names
+            print("Genre name must only contain letters and spaces")
+        elif genre.lower() in [key.lower() for key in inventory]: #Uniqueness check
             print("Genre name must be unique")
         else:
             valid = True
@@ -126,9 +126,9 @@ def inventory_analysis_and_visualisation(inventory, maxAmnt):
     #Creating a text report
     table = pd.DataFrame({"Genre":list(inventory.keys()), "Books":list(inventory.values())})
     print("The total number of books in the library is",table["Books"].sum())
-    table["Average"] = (table["Books"]/len(table)).apply(m.ceil) #takes the rounded up nearest whole number
+    table["Average"] = (table["Books"]/len(table)).apply(m.ceil) #Takes the nearest whole number when rounded up
     print(table)
-    for genre in inventory:
+    for genre in inventory: #Displays stock status
         status = (inventory[genre]/maxAmnt[genre]) * 100
         if status >= 75:
             level = "High"
@@ -141,25 +141,25 @@ def inventory_analysis_and_visualisation(inventory, maxAmnt):
     
     #Creating a bar plot
     plt.bar(table["Genre"], table["Books"])
-    plt.title("Library")
+    plt.title("Library Management System")
     plt.xlabel("Genres")
-    plt.ylabel("Current Inventory Count")
+    plt.ylabel("Current Inventory Counts")
     plt.show()
 
     return inventory, maxAmnt
 
-#Write the updated inventory back to LibraryInventory.csv
+#Writes the updated inventory back to LibraryInventory.csv
 def save_inventory_to_csv(inventory):
     try:
 
-        df = pd.DataFrame(list(inventory.items()))
-        df.to_csv("LibraryInventory.csv", header = False, index = False)
+        df = pd.DataFrame(list(inventory.items())) #Convert to a dataframe
+        df.to_csv("LibraryInventory.csv", header = False, index = False) #Saves to csv without headers or indexes
         print("Saving was successful!")
     
-    except PermissionError:
+    except PermissionError: #Catches Access denial errors
         print("The file could not be written")
 
-    except OSError:
+    except OSError: #Catches unexpected Operating system errors
         print("An error occurred whilst attempting to save the file")
     
     return inventory
@@ -172,10 +172,10 @@ def quit_program(inventory):
         df.to_csv("LibraryInventory.csv", header = False, index = False)
         print("File was saved")
     
-    except PermissionError:
+    except PermissionError: #Catches Access denial errors
         print("The file could not be written")
 
-    except OSError:
+    except OSError: #Catches unexpected Operating system errors
         print("An error occured whilst attempting to save the file")
     
     print("Farewell!")
@@ -213,3 +213,5 @@ while not valid:
     elif choice == "6" or choice == "quit":
         inventory = quit_program(inventory)
         valid = True
+    else:
+        print("Invalid input!")
