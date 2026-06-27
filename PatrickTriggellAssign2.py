@@ -24,7 +24,7 @@ def load_inventory_from_csv():
         return inventory, maxAmnt
 
     except FileNotFoundError:
-        print("File was not found.")
+        print("File was not found")
         quit()
     
     except ValueError:
@@ -56,7 +56,7 @@ def add_new_genre(inventory, maxAmnt):
             else:
                 valid = True
         except ValueError:
-            print("Please enter a number")
+            print("Please enter a positive number")
     inventory[genre.title()] = amount
     print("You successfully created", genre, "and added", amount, "books")
     maxAmnt[genre.title()] = amount #Stores max for this genre in the max dictionary
@@ -81,17 +81,17 @@ def checkout_or_return(inventory):
                 while True:
                     try:
                         amount = int(input("How many books do you want to checkout? "))
-                        if amount <= 0:
+                        if amount <= 0: #Positivity check
                             print("Must be a positive integer") 
                         else:
-                            if inventory[genre] - amount < 0: #positivity check
+                            if inventory[genre] - amount < 0: #Validates sufficient stock
                                 print("You cannot checkout more books than are available")
                             else:
                                 inventory[genre] -= amount #updates inventory
-                                print("You have checked out",amount, "books from", genre)
+                                print("You have checked out",amount, "books to", genre)
                                 return inventory
                     except ValueError:
-                        print("Please select a number")
+                        print("Please select a positive integer")
             else:
                 print("Error! invalid input. Please choose from one of the genres in your inventory")
                 valid = False
@@ -106,19 +106,19 @@ def checkout_or_return(inventory):
                 while True:
                     try:
                         amount = int(input("How many books do you want return? "))
-                        if amount <= 0:
+                        if amount <= 0: #Positivity check
                             print("Must be a positive integer") 
                         else:
-                            inventory[genre] += amount
+                            inventory[genre] += amount #increases inventory without maximum cap, no need for accumulators
                             print("You have returned",amount, "books from", genre)                           
                             return inventory
                     except ValueError:
-                            print("Please select a number")
+                            print("Please select a positive integer")
             else:
                     print("Error! invalid input. Please choose from one of the genres in your inventory")
                     valid = False
         else:
-                print("Error! invalid input. Please choose from one of the options")
+                print('Error! invalid input. Please choose either "Checkout (C) or Return (R)"')
                 valid = False
 
 #provides both text and visual report of an inventory analysis for the user
